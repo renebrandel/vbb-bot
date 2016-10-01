@@ -1,5 +1,9 @@
 export function stringifyDepartures (departures) {
-  return departures.map(departure => `**${departure.name.trim()}** is leaving at **${departure.time}** to **${departure.direction}**`).join('<br/>')
+  if (departures.length > 1) {
+    return departures.map(departure => `**${departure.name.trim()}** is leaving at **${departure.time}** to **${departure.direction}**`).join('<br/>')
+  } else {
+    return departures.map(departure => `**${departure.name.trim()}** is leaving at **${departure.time}** to **${departure.direction}**`)
+  }
 }
 
 export function getFirstStation (result) {
