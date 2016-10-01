@@ -1,6 +1,6 @@
 import restify from 'restify'
 import builder from 'botbuilder'
-import { getStations, getTrips, getDepartures } from './api'
+import { getStation, getTrips, getDepartures } from './api'
 import { stringifyDepartures, getFirstStation  } from './valueparser'
 
 // Setting up the server
@@ -50,8 +50,8 @@ intents.matches('GetTrip', [
     const toStation = builder.EntityRecognizer.findEntity(args.entities, 'ToLocation').entity
 
     Promise.all([
-      getStations(fromStation),
-      getStations(toStation)
+      getStation(fromStation),
+      getStation(toStation)
     ]).then(stations => {
       session.send('Looking for trips from **%s** to **%s**.', stations[0].name, stations[1].name)
       getTrips(stations[0].id, stations[1].id).then(result => {
@@ -64,7 +64,7 @@ intents.matches('GetTrip', [
 intents.matches('GetDepartures', [
   (session, args) => {
     session.send(loading)
-    getStations(builder.EntityRecognizer.findEntity(args.entities, 'FromLocation').entity)
+    getStation(builder.EntityRecognizer.findEntity(args.entities, 'FromLocation').entity)
       .then(station => {
         session.send('Let me look for all the trains leaving %s', station.name)
         return getDepartures(station.id)
